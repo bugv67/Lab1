@@ -7,9 +7,10 @@
 /* return string "word" if the count is 1 or "words" otherwise */
 char *words(int count)
 {
-    char *words = "words";
+    char *words = "words"; // read only - cannot be modified
     if (count == 1)
-        words[strlen(words) - 1] = '\0';
+        // words[strlen(words) - 1] = '\0'; // segmentation fault!!
+        return "word";
 
     return words;
 }

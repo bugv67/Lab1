@@ -6,4 +6,4 @@ part0: count-words.c
 	gcc $(CFLAGS) count-words.c -o part0
 
 clean:
-	rm -f part0V
+	rm -f part0
