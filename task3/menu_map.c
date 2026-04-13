@@ -77,15 +77,69 @@ char dprt(char c)
     printf("%d\n", (unsigned char)c);
     return c;
 }
+struct fun_desc
+{
+    char *name;
+    char index;
+    char (*fun)(char);
+};
+struct fun_desc menu[] = {
+    {"Get string", 'g', my_get},
+    {"Print decimal", 'd', dprt},
+    {"Print hex", 'x', cxprt},
+    {"Encrypt", 'e', encrypt},
+    {"Decrypt", 'i', decrypt},
+    {NULL, 0, NULL} // end
+};
 int main(int argc, char **argv)
 {
     /* TODO: Test your code */
-    int base_len = 5;
-    char arr1[base_len];
-    char *arr2 = map(arr1, base_len, my_get);
-    char *arr3 = map(arr2, base_len, dprt);
-    char *arr4 = map(arr3, base_len, cxprt);
-    free(arr2);
-    free(arr3);
-    free(arr4);
+    char *carray = malloc(5 * sizeof(char));
+    if (carray == NULL)
+        return 1;
+    carray[0] = '\0';
+
+    char input[100];
+
+    while (1)
+    {
+        printf("Select operation from the following menu:\n");
+        for (int i = 0; menu[i].name != NULL; i++) // print menu options
+        {
+            printf("%c) %s\n", menu[i].index, menu[i].name);
+        }
+
+        printf("Option: ");
+        if (fgets(input, sizeof(input), stdin) == NULL)
+        {
+            printf("\nExiting...\n");
+            free(carray);
+            break;
+        }
+        char choice = input[0];
+        int found = 0;
+        for (int i = 0; menu[i].name != NULL; i++)
+        {
+            if (choice == menu[i].index)
+            {
+                printf("Within bounds\n");
+                char *tmp = map(carray, 5, menu[i].fun); // calling
+                free(carray);
+                carray = tmp;
+
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            printf("Not within bounds\n");
+            // exit(0)?
+        }
+
+        printf("DONE.\n\n");
+    }
+    // end on ctrl d
+    return 0;
 }
